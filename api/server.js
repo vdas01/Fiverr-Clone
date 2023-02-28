@@ -9,6 +9,7 @@ import conversation_Route from "./routes/conversation_route.js";
 import message_Route from "./routes/message_route.js";
 import review_Route from "./routes/review_route.js";
 import cookieParser from "cookie-parser"
+import cors from "cors"
 
 
 
@@ -26,8 +27,15 @@ const connect = async()=>{
     }
 }
 
+app.use(cors({
+   origin:"http://127.0.0.1:5173",
+    credentials:true
+}))
+//to send json data from client
 app.use(express.json());
+//to send cookies from client
 app.use(cookieParser());
+
 
 
 app.use("/api/auth", auth_Route);

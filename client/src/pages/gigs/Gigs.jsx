@@ -2,12 +2,23 @@ import React, { useState } from 'react'
 import "./Gigs.scss"
 import GigCard from '../../components/gigCard/GigCard';
 import { gigs } from '../../data';
+import newRequest from '../../utils/newRequest';
+import { useQuery } from '@tanstack/react-query';
 
 
 const Gigs = () => {
   const [sort, setSort] = useState("sales");
   const [open, setOpen] = useState(false);
 
+  const {isLoading, error, data} = useQuery({
+    queryKey : [''],
+    queryFn : ()=>
+    newRequest.get("/gigs").then((res)=>{
+      return res.data;
+    })
+  })
+
+   console.log(data);
   const reSort = (type)=>{
     setSort(type);
     setOpen(false);
@@ -41,9 +52,9 @@ const Gigs = () => {
            </div>
          </div>
          <div className="cards">
-            {
-              gigs.map(gig=>(
-                <GigCard key={gig.id} item={gig}/>
+            {isLoading ? "Loading" : error ? "Something went wrong" : 
+              data.map(gig=>(
+                <GigCard key={gig._id} item={gig}/>
               ))
             }
          </div>
